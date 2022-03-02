@@ -1,37 +1,34 @@
-const express = require('express');
-const app = express();
-app.use(express.json());
+const express = require('express')
+const app = express()
+const port = 3000
 
-app.get('/', (req, res) => res.status(200).send("Hello Programmers"));
+app.use(express.urlencoded({ extended: true }));
 
-app.post("/bfhl", (req, res) => {
-    const {data} = req.body;
-    const numbers = [];
-    const alphabets = [];
-    const alphaRegex = /^[a-zA-Z]{1,}$/;
-    const numRegex = /^[0-9]{1,}$/;
-    try{
-        data.forEach((item, index) => {
-            if(numRegex.test(item)) {
-                numbers.push(item);
-            } else if(alphaRegex.test(item)){
-                alphabets.push(item);
-            }
-        });
-    
-        const result = {
-            isSuccess: "true",
-            user_id: "Lakshit_Rattan_03042001",
-            email: "lakshit0439.cse19@chitkara.edu.in",
-            roll_number: 1910990439,
-            numbers,
-            alphabets
-        };
-    
-        res.status(200).send(result);
-    } catch(err) {
-        res.status(422).send({isSuccess:"false"});
+app.post("/bfhl",(req,res) => {
+    const data = req.body.data;
+
+    const num = [];
+    const alp = [];
+
+    data.forEach((k) => {
+        if(isNaN(k))
+            alp.push(k);
+        else
+            num.push(k);
+    })
+
+    const result ={
+        is_success: true,
+        user_id: "Lakshit_Rattan_03042001",
+        email : "lakshit0439.cse19@chitkara.edu.in",
+        roll_number:"1910990439",
+        numbers: num,
+        alphabets: alp
     }
-    
+
+    res.send(JSON.stringify(result));
 })
-app.listen(3000);
+
+app.listen(port, () => {
+	console.log(`App listening at http://localhost:${port}`)
+})
